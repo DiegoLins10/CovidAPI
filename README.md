@@ -13,4 +13,4 @@ Um aplicativo usando android studio e Kotlin que acessa a internet e faz chamado
 - API disease.sh Covid-19: https://disease.sh/docs/#/
 
 ###Imagem demosntrativa
-![](git1.png)
+![](app.jpeg)
