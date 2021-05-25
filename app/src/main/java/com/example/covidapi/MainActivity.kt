@@ -29,14 +29,13 @@ class MainActivity : AppCompatActivity() {
     var totalCasosHoje: Long = 0
     var totalRecuperados: Long = 0
     var recuperadosHoje: Long = 0
+    var morteHoje: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         buscaDados()
-        /*btnCalcular.setOnClickListener(){
-            calcular()
-        }*/
+
     }
     fun buscaDados(){
         doAsync {
@@ -48,6 +47,7 @@ class MainActivity : AppCompatActivity() {
             totalCasosHoje = JSONObject(resposta).getLong("todayCases")
             totalRecuperados = JSONObject(resposta).getLong("recovered")
             recuperadosHoje = JSONObject(resposta).getLong("todayRecovered")
+            morteHoje = JSONObject(resposta).getLong("todayDeaths")
             val f = NumberFormat.getNumberInstance(Locale("pt", "br"))
             val date: Date = Date()
             val formato = "dd/MM/yyyy HH:mm:ss"
@@ -60,12 +60,13 @@ class MainActivity : AppCompatActivity() {
             val totalCasosHojeFormatada = f.format(totalCasosHoje)
             val totalRecuperadosFormatada = f.format(totalRecuperados)
             val recuperadosHojeFormatada = f.format(recuperadosHoje)
+            val morteHojeFormatada = f.format(morteHoje)
 
             uiThread {
                 // alert ("$cotacaoBitcoin").show()
                 //alert("$totalCasosFormatado").show()
                 txtCasos.setText("$totalCasosFormatado   $dataFormatada")
-                txtTotalMortes.setText("$totalMortesFormatada")
+                txtTotalMortes.setText("$totalMortesFormatada       Mortes Hoje: $morteHojeFormatada")
                 txtPopulacao.setText("$populacaoFormatada")
                 txtCasosHoje.setText("$totalCasosHojeFormatada")
                 txtRecuperados.setText("$totalRecuperadosFormatada")
@@ -74,17 +75,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-   /* fun calcular(){
-        if(txtValor.text.isEmpty()){
-            txtValor.error = "Preencha um valor"
-            return
-        }
-        //valor digitado usuario
-        val valorDigitado = txtValor.text.toString()
-            .replace(",", ".").toDouble()
-        //.replace(".","").toDouble().toDouble()
-        val resultado = if(cotacaoBitcoin>0) valorDigitado / cotacaoBitcoin
-        else 0.0
-        txtQtdBitcoins.text = "%.8f".format(resultado)
-    }*/
 }
