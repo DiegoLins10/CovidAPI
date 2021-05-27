@@ -22,7 +22,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     val API_URL = "https://disease.sh/v3/covid-19/countries/brazil?strict=true"
-
+    val API_URL2 = "https://disease.sh/v3/covid-19/vaccine/coverage/countries/br?lastdays=1&fullData=true"
     var totalCasos: Long = 0
     var totalMortes: Long = 0
     var populacao: Long = 0
@@ -30,11 +30,28 @@ class MainActivity : AppCompatActivity() {
     var totalRecuperados: Long = 0
     var recuperadosHoje: Long = 0
     var morteHoje: Long = 0
+    var vacinas: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         buscaDados()
+        buscaDados2()
+
+    }
+
+    fun buscaDados2(){
+        doAsync {
+            val resposta2 = URL(API_URL2).readText()
+            vacinas = JSONObject(resposta2).getJSONArray("timeline").getJSONObject(0).getLong("total")
+            val f = NumberFormat.getNumberInstance(Locale("pt", "br"))
+            val vacinasFormatadas = f.format(vacinas)
+
+
+            uiThread{
+                txtCasosHoje.setText("$vacinasFormatadas")
+            }
+        }
 
     }
     fun buscaDados(){
@@ -68,9 +85,9 @@ class MainActivity : AppCompatActivity() {
                 txtCasos.setText("$totalCasosFormatado   $dataFormatada")
                 txtTotalMortes.setText("$totalMortesFormatada       Mortes Hoje: $morteHojeFormatada")
                 txtPopulacao.setText("$populacaoFormatada")
-                txtCasosHoje.setText("$totalCasosHojeFormatada")
+                //txtCasosHoje.setText("$totalCasosHojeFormatada")
                 txtRecuperados.setText("$totalRecuperadosFormatada")
-                txtRecuperadosHoje.setText("$recuperadosHojeFormatada")
+                txtRecuperadosHoje.setText("$recuperadosHojeFormatada       Casos hoje: $totalCasosHojeFormatada")
 
             }
         }
